@@ -17,8 +17,8 @@ import redirects from "~data/redirects.json";
 
 const cache = new Map();
 const filePathBlockchain = "/contrib/devtools/generated/api_v1.json";
-const filePathSdk = "/docs/api.json";
-const rawGitHubBase = "https://raw.githubusercontent.com/lbryio/";
+const filePathSdk = "docs/api.json";
+const rawGitHubBase = "https://cdn.jsdelivr.net/gh/lbryfoundation/";
 
 const octokit = new Octokit({
   auth: `token ${process.env.GITHUB_OAUTH_TOKEN}`
@@ -92,6 +92,7 @@ export default async(state) => {
       </div>
     `;
   } catch(error) {
+    console.log(error);
     const redirectUrl = redirects[state.href];
 
     return asyncHtml`
@@ -238,10 +239,12 @@ function createSdkSidebar(apiDetails) {
 }
 
 async function getTags(repositoryName) {
-  const { data } = await octokit.repos.listTags({
-    owner: "lbryio",
-    repo: repositoryName
-  });
+  const {versions: data} = await (await fetch(`https://data.jsdelivr.com/v1/packages/gh/lbryfoundation/${repositoryName}`)).json();
+
+  // const { data } = await octokit.repos.listTags({
+  //   owner: "lbryio",
+  //   repo: repositoryName
+  // });
 
   const tags = ["master"];
 
@@ -254,19 +257,20 @@ async function getTags(repositoryName) {
   switch(true) {
     case repositoryName === "lbry-sdk":
       data.forEach(tag => {
-        if (tag.name >= "v0.52.0") tags.push(tag.name);
+        if (tag.version >= "v0.52.0") tags.push(tag.version);
       });
       break;
 
     case repositoryName === "lbrycrd":
       data.forEach(tag => {
         if (
-          tag.name >= "v0.17.1.0" &&
-          tag.name !== "v0.3.16" &&
-          tag.name !== "v0.3.15" &&
-          tag.name !== "v0.3-osx" &&
-          tag.name !== "v0.2-alpha"
-        ) tags.push(tag.name);
+          tag.version >= "v0.17.1.0" &&
+          tag.version !== "v0.3.16" &&
+          tag.version !== "v0.3.15" &&
+          tag.version !== "v0.3-osx" &&
+          tag.version !== "v0.2-alpha"
+        ) 
+          tags.push(tag.version);
       });
       break;
 
@@ -278,7 +282,7 @@ async function getTags(repositoryName) {
 }
 
 async function parseApiFile({ repo, tag }) {
-  let apiFileLink = `${rawGitHubBase}${repo}/${tag}`;
+  let apiFileLink = `${rawGitHubBase}${repo}@${tag}/`;
 
   switch(true) {
     case (repo === "lbrycrd"):
@@ -293,10 +297,12 @@ async function parseApiFile({ repo, tag }) {
       return Promise.reject(new Error("Failed to fetch API docs"));
   }
 
-  const response = await got(apiFileLink, { cache, json: true });
+  // const response = await got(apiFileLink, { cache, json: true });
+  console.log(apiFileLink);
+  const response = await fetch(apiFileLink);
 
   try {
-    return response.body;
+    return response.json();
   } catch(error) {
     return "Issue loading API documentation";
   }
