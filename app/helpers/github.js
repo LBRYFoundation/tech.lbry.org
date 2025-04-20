@@ -15,9 +15,7 @@ let lastGithubFeedUpdate;
 updateGithubFeed();
 
 // Update the feed every 5 minutes
-setInterval(async () => {
-  githubFeed = await updateGithubFeed();
-}, 5 * 60 * 1000);
+setInterval(() => { updateGithubFeed(); }, 5 * 60 * 1000);
 
 //  P R O G R A M
 
@@ -315,21 +313,18 @@ async function updateGithubFeed() {
   let response;
 
   try {
-    lastGithubFeedUpdate = new Date();
-    
     response = await fetch(`https://api.github.com/orgs/lbryfoundation/events`, process.env.GITHUB_TOKEN && {
       headers: {
         'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
       }
     });
-    
   } catch (err) {
     console.log(err);
-    
     return;
   }
-
+  
   githubFeed = await response.json();
+  lastGithubFeedUpdate = new Date();
 }
 
 
