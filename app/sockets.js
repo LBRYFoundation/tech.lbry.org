@@ -4,24 +4,15 @@
 
 //  I M P O R T S
 
-import got from "got";
 import html from "choo/html";
 
 //  U T I L S
 
-import apiPage from "~view/api";
-import fetchMetadata from "~helper/fetch-metadata";
-import lbrytvAPI from "~helper/lbrytv-sdk";
-import { generateGitHubFeed } from "~helper/github";
-import messageSlack from "~helper/slack";
+import apiPage from "./views/api";
+import fetchMetadata from "./helpers/fetch-metadata";
+import lbrytvAPI from "./helpers/lbrytv-sdk";
+import { generateGitHubFeed } from "./helpers/github";
 import { URL } from "url";
-
-const githubAppId = process.env.GITHUB_APP_ID;
-const githubAppSecret = process.env.GITHUB_APP_SECRET;
-
-// const githubAppId = process.env.GITHUB_APP_ID_TEST;
-// const githubAppSecret = process.env.GITHUB_APP_SECRET_TEST;
-
 
 
 //  P R O G R A M
@@ -31,14 +22,6 @@ export default async(socket, action) => {
     return;
 
   switch(true) {
-    case action.message === "auth me with github":
-      getGitHubUserToken(socket);
-      break;
-
-    case action.message === "verify github token":
-      verifyGitHubToken(action, socket);
-      break;
-
     case action.message === "fetch metadata":
       fetchMetadata(action, socket);
       break;
@@ -87,11 +70,6 @@ export default async(socket, action) => {
       });
       break;
 
-    case action.message === "subscribe":
-      newsletterSubscribe(action, socket);
-      break;
-
-
     case action.message === "view different documentation version":
       send(socket, {
         element: "div",
@@ -134,7 +112,7 @@ function generateContent(exampleNumber, displayTrendingContent) {
               for (const r in responses) {
                 const part = responses[r];
 
-                if (part.value && part.value.thumbnail.url) {
+                if (part.value && part.value.thumbnail && part.value.thumbnail.url) {
                   renderedContentCollection.push(`
                   <section class="playground-content__trend">
                     <figure
@@ -359,13 +337,6 @@ function generateMemeCreator(socket) {
   });
 }
 
-function getGitHubUserToken(socket) {
-  send(socket, {
-    message: "redirect",
-    url: `https://github.com/login/oauth/authorize?client_id=${githubAppId}&scope=public_repo,user:email`
-  });
-}
-
 function makeImageSourceSecure(url) {
   if (!url || !url.length)
     return url;
@@ -378,88 +349,6 @@ function makeImageSourceSecure(url) {
   return originalUrl.href;
 }
 
-async function newsletterSubscribe(data, socket) {
-  const email = data.email;
-
-  if (!validateEmail(email)) {
-    send(socket, {
-      class: "error",
-      html: "Your email address is invalid",
-      message: "updated html",
-      selector: "#emailMessage"
-    });
-  }
-
-  try {
-    await got.post(`https://api.lbry.com/list/subscribe?email=${encodeURIComponent(email)}&tag=developer`);
-
-    return send(socket, {
-      html: "Thank you! Please confirm subscription in your inbox.",
-      message: "updated html",
-      selector: "#emailMessage"
-    });
-  } catch(error) {
-    const response = JSON.parse(error.body);
-
-    if (!response.success) {
-      messageSlack({
-        message: `via ${email}: ${response.error}`,
-        title: "NEWSLETTER ERROR"
-      });
-
-      return send(socket, {
-        class: "error",
-        html: response.error,
-        message: "updated html",
-        selector: "#emailMessage"
-      });
-    }
-
-    messageSlack({
-      message: `via ${email} (strange error): ${response.error}`,
-      title: "NEWSLETTER ERROR"
-    });
-
-    return send(socket, {
-      class: "error",
-      html: "Something is terribly wrong",
-      message: "updated html",
-      selector: "#emailMessage"
-    });
-  }
-}
-
 export function send(transport, data) {
   return transport.send(JSON.stringify(data));
-}
-
-function validateEmail(email) {
-  const emailRegex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\\.,;:\s@"]{2,})$/i;
-  return emailRegex.test(String(email)); // eslint-disable-line padding-line-between-statements
-}
-
-async function verifyGitHubToken(data, socket) {
-  const code = data.code;
-
-  try {
-    const result = await got.post(`https://github.com/login/oauth/access_token?client_id=${githubAppId}&client_secret=${githubAppSecret}&code=${code}`, { json: true });
-
-    const response = {
-      address: data.address,
-      code: result.body.access_token
-    };
-
-    return send(socket, {
-      data: response,
-      message: "github token status"
-    });
-  } catch(verificationError) {
-    console.log(verificationError.body); // eslint-disable-line no-console
-
-    return send(socket, {
-      details: verificationError.body,
-      message: "notification",
-      type: "error"
-    });
-  }
 }

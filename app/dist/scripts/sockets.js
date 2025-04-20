@@ -25,11 +25,6 @@ function initializeWebSocketConnection() {
     let data = JSON.parse(socket.data);
 
     switch(true) {
-      case data.message === "github token status":
-        data = data.data;
-        syncWithApi(data); // eslint-disable-line no-undef
-        break;
-
       case data.message === "notification": // TODO: Make work with appending so multiple notifications can be sent
         document.getElementById("flash-container").innerHTML =
           `<div class="flash active${data.type ? " " + data.type : ""}">${data.details}</div>`;
@@ -92,11 +87,6 @@ function initializeWebSocketConnection() {
 
         if (data.class)
           document.querySelector(data.selector).classList.add(data.class);
-
-        if (data.selector !== "#emailMessage") {
-          document.getElementById("emailAddress").value = "";
-          document.getElementById("emailMessage").innerHTML = "";
-        }
 
         if (data.example === 2) {
           detectLanguageAndUpdate(); // eslint-disable-line no-undef

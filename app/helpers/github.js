@@ -4,44 +4,20 @@
 
 //  P A C K A G E S
 
-import async from "async";
-import color from "colorette";
-import Octokit from "@octokit/rest";
-import redis from "redis";
 
 //  U T I L S
 
-import messageSlack from "~helper/slack";
-import relativeDate from "~module/relative-date";
-
-let octokit;
-
-//  R E D I S
-
-let client;
-
-if (process.env.GITHUB_OAUTH_TOKEN) {
-  octokit = new Octokit({
-    auth: `token ${process.env.GITHUB_OAUTH_TOKEN}`
-  });
-} else process.stdout.write(`${color.red("[missing]")} GitHub token\n`);
-
-if (process.env.REDISCLOUD_URL) {
-  client = redis.createClient(process.env.REDISCLOUD_URL);
-
-  client.on("error", redisError => {
-    process.env.NODE_ENV === "development" ?
-      process.stdout.write(`\n${color.yellow("Unable to connect to Redis client.")}\nYou may be missing an .env file or your connection was reset.`) :
-      messageSlack(
-        "\n" +
-        "> *REDIS ERROR:* ```" + JSON.parse(JSON.stringify(redisError)) + "```" + "\n" +
-        "> _Cause: Someone is trying to run LBRY.tech locally without environment variables OR Heroku is busted_\n"
-      )
-    ;
-  });
-} else process.stdout.write(`${color.red("[missing]")} Redis client URL\n`);
+import relativeDate from "../modules/relative-date";
 
 
+let githubFeed;
+let lastGithubFeedUpdate;
+updateGithubFeed();
+
+// Update the feed every 5 minutes
+setInterval(async () => {
+  githubFeed = await updateGithubFeed();
+}, 5 * 60 * 1000);
 
 //  P R O G R A M
 
@@ -264,49 +240,41 @@ function generateEvent(event) {
   }
 }
 
-function generateGitHubFeed(displayGitHubFeed) {
-  if (process.env.REDISCLOUD_URL) {
-    client.zrevrange("events", 0, 9, (err, reply) => {
-      if (err) return; // TODO: Render a div with nice error message
+async function generateGitHubFeed(displayGitHubFeed) {
+  await githubFeed;
+  if (!githubFeed) return;
 
-      const events = [];
-      const renderedEvents = [];
+  const renderedEvents = [];
 
-      reply.forEach(item => events.push(JSON.parse(item)));
+  for (const event of githubFeed) {
+    const repoName = `
+      <a href="${generateUrl("repo", event)}" title="View this repo on GitHub" target="_blank" rel="noopener noreferrer"><strong>${event.repo.name}</strong></a>
+    `;
 
-      for (const event of events) {
-        const repoName = `
-          <a href="${generateUrl("repo", event)}" title="View this repo on GitHub" target="_blank" rel="noopener noreferrer"><strong>${event.repo.name}</strong></a>
-        `;
+    renderedEvents.push(`
+      <div class='github-feed__event'>
+        <a href="${generateUrl("actor", event)}" target="_blank" rel="noopener noreferrer">
+          <img src="${event.actor.avatar_url}" class="github-feed__event__avatar" alt="${event.actor.login}'s avatar"/>
+        </a>
 
-        renderedEvents.push(`
-          <div class='github-feed__event'>
-            <a href="${generateUrl("actor", event)}" target="_blank" rel="noopener noreferrer">
-              <img src="${event.actor.avatar_url}" class="github-feed__event__avatar" alt="${event.actor.login}'s avatar"/>
-            </a>
-
-            <p>
-              ${generateEvent(event)}
-              ${event.type !== "ForkEvent" ? repoName : ""}
-              <em class="github-feed__event__time">${relativeDate(new Date(event.created_at))}</em>
-            </p>
-          </div>
-        `);
-      }
-
-      updateGithubFeed(); // TODO: Update `.last-updated` every minute
-
-      displayGitHubFeed(`
-        <h3>GitHub</h3>
-        <h5 class="last-updated">Last updated: ${new Date().format("YYYY-MM-DD")
-    .replace(/-/g, "&middot;")} at ${new Date().add(-4, "hours")
-  .format("UTC:H:mm:ss A")
-  .toLowerCase()} EST</h5>
-
-        ${renderedEvents.join("")}
-      `);
-    });
+        <p>
+          ${generateEvent(event)}
+          ${event.type !== "ForkEvent" ? repoName : ""}
+          <em class="github-feed__event__time">${relativeDate(new Date(event.created_at))}</em>
+        </p>
+      </div>
+    `);
   }
+
+  displayGitHubFeed(`
+    <h3>GitHub</h3>
+    <h5 class="last-updated">Last updated: ${lastGithubFeedUpdate.format("YYYY-MM-DD")
+  .replace(/-/g, "&middot;")} at ${lastGithubFeedUpdate
+  .format("UTC:H:mm:ss A")
+  .toLowerCase()} UTC</h5>
+
+    ${renderedEvents.join("")}
+  `);
 }
 
 function generateUrl(type, event) {
@@ -343,33 +311,25 @@ function generateUrl(type, event) {
   }
 }
 
-function updateGithubFeed() {
-  octokit.activity.listPublicEventsForOrg({
-    org: "lbryio",
-    per_page: 20,
-    page: 1
-  }).then(({ data }) => {
-    async.eachSeries(data, (item, callback) => {
-      const eventString = JSON.stringify(item);
+async function updateGithubFeed() {
+  let response;
 
-      client.zrank("events", eventString, (err, reply) => {
-        if (err)
-          return;
-
-        if (reply === null)
-          client.zadd("events", item.id, eventString, callback);
-        else
-          callback();
-      });
-    }, () => client.zremrangebyrank("events", 0, -51)); // Keep the latest 50 events
-  })
-    .catch(err => {
-      messageSlack(
-        "\n" +
-        "> *GITHUB FEED ERROR:* ```" + JSON.parse(JSON.stringify(err)) + "```" + "\n" +
-        "> _Cause: GitHub feed refresh_\n"
-      );
+  try {
+    lastGithubFeedUpdate = new Date();
+    
+    response = await fetch(`https://api.github.com/orgs/lbryfoundation/events`, process.env.GITHUB_TOKEN && {
+      headers: {
+        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`
+      }
     });
+    
+  } catch (err) {
+    console.log(err);
+    
+    return;
+  }
+
+  githubFeed = await response.json();
 }
 
 

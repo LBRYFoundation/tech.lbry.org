@@ -11,7 +11,7 @@ import raw from "choo/html/raw";
 
 //  U T I L S
 
-import markdown from "~component/markdown";
+import markdown from "../components/markdown";
 import page404 from "./404";
 
 
@@ -56,10 +56,6 @@ export default (state, emit) => { // eslint-disable-line
   let pageScript = "";
 
   switch(true) {
-    case partialPath === "developer-program":
-      pageScript = renderClientScript("devprogram-scripts");
-      break;
-
     case partialPath === "glossary":
       pageScript = renderClientScript("glossary-scripts");
       break;

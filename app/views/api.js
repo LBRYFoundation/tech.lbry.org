@@ -6,23 +6,17 @@
 
 import asyncHtml from "choo-async/html";
 import dedent from "dedent";
-import got from "got";
-import Octokit from "@octokit/rest";
 
 //  U T I L S
 
-import headerBlockchain from "~component/api/header-blockchain";
-import headerSdk from "~component/api/header-sdk";
-import redirects from "~data/redirects.json";
+import headerBlockchain from "../components/api/header-blockchain";
+import headerSdk from "../components/api/header-sdk";
+import redirects from "../data/redirects.json";
 
 const cache = new Map();
 const filePathBlockchain = "/contrib/devtools/generated/api_v1.json";
 const filePathSdk = "docs/api.json";
 const rawGitHubBase = "https://cdn.jsdelivr.net/gh/lbryfoundation/";
-
-const octokit = new Octokit({
-  auth: `token ${process.env.GITHUB_OAUTH_TOKEN}`
-});
 
 
 
@@ -51,7 +45,7 @@ export default async(state) => {
       <div class="__slate">
         <aside class="api-toc">
           <select class="api-toc__select" onchange="changeDocumentationVersion(value);">
-            ${renderVersionSelector(wildcard, tags, tag)}
+            ${asyncHtml(renderVersionSelector(wildcard, tags, tag))}
           </select>
 
           <div class="api-toc__search">
@@ -61,7 +55,7 @@ export default async(state) => {
           </div>
 
           <ul class="api-toc__commands" id="toc" role="navigation">
-            ${wildcard === "sdk" ? createSdkSidebar(apiResponse) : createApiSidebar(apiResponse)}
+            ${asyncHtml(wildcard === "sdk" ? createSdkSidebar(apiResponse) : createApiSidebar(apiResponse))}
           </ul>
         </aside>
 
@@ -70,11 +64,11 @@ export default async(state) => {
             <div></div>
 
             <nav class="api-content__items">
-              ${renderCodeLanguageToggles(wildcard)}
+              ${asyncHtml(renderCodeLanguageToggles(wildcard))}
             </nav>
 
-            ${createApiHeader(wildcard, currentTag)}
-            ${wildcard === "sdk" ? createSdkContent(apiResponse) : createApiContent(apiResponse)}
+            ${asyncHtml(createApiHeader(wildcard, currentTag))}
+            ${asyncHtml(wildcard === "sdk" ? createSdkContent(apiResponse) : createApiContent(apiResponse))}
           </div>
         </section>
 
@@ -297,12 +291,17 @@ async function parseApiFile({ repo, tag }) {
       return Promise.reject(new Error("Failed to fetch API docs"));
   }
 
-  // const response = await got(apiFileLink, { cache, json: true });
-  console.log(apiFileLink);
+  // if (cache.has(apiFileLink)) {
+  //   console.log("Using cache for " + apiFileLink);
+  //   return cache.get(apiFileLink);
+  // }
+
   const response = await fetch(apiFileLink);
 
   try {
-    return response.json();
+    const json = response.json();
+    // cache.set(apiFileLink, json);
+    return json;
   } catch(error) {
     return "Issue loading API documentation";
   }

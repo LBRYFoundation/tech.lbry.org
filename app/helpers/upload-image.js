@@ -4,7 +4,6 @@
 
 //  I M P O R T
 
-import got from "got";
 
 //  U T I L
 
@@ -18,6 +17,7 @@ const queryUrl = process.env.NODE_ENV === "development" ?
 
 export default async(imageSource) => {
   const options = {
+    method: 'POST',
     body: {
       authorization: process.env.LBRY_DAEMON_ACCESS_TOKEN,
       image: imageSource
@@ -26,7 +26,7 @@ export default async(imageSource) => {
   };
 
   try {
-    const response = await got.post(queryUrl, options);
+    const response = await fetch(queryUrl, options);
     return response.body; // eslint-disable-line padding-line-between-statements
   } catch(error) {
     return error;

@@ -26,7 +26,7 @@ export default links => {
 //  H E L P E R
 
 function returnLinkTemplate(title, description, destination, label) {
-  return `
+  return html`
     <li class="link-grid__link">
      <p class="link-grid__title"><strong>${title}</strong></p>
      <p class="link-grid__description">${description}</p>

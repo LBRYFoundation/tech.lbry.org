@@ -8,7 +8,7 @@ import html from "choo/html";
 
 //  U T I L
 
-import config from "~root/config";
+import config from "../../config";
 
 
 
@@ -61,8 +61,8 @@ export default (state, emit) => {
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"/>
     <link rel="mask-icon" href="/assets/favicon.svg" color="${config.meta.color}"/>
     <link rel="shortcut icon" href="/assets/favicon.ico"/>
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@master/distr/fira_code.css"/>
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=inter:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/bundle.css"/>
 
     <script src="/assets/scripts/sockets.js"></script>

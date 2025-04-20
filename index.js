@@ -4,7 +4,7 @@
 
 //  P A C K A G E S
 
-require('module-alias/register')
+// require('module-alias/register')
 require("@babel/register");
 require("@babel/polyfill");
 require("date-format-lite");
