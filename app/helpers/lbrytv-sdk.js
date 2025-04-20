@@ -1,5 +1,4 @@
 "use strict";
-import messageSlack from "./slack";
 const request = require("request");
 
 
@@ -26,18 +25,10 @@ const resolve = function(urls) {
 
     request(options, function(error, response, daemonResponse) {
       if (error) {
-        messageSlack({
-          message: "```" + error + "```",
-          title: "DAEMON ERROR: resolve"
-        });
         return reject(new Error("DAEMON ERROR: resolve"));
       }
 
       if (Object.prototype.hasOwnProperty.call(daemonResponse, "error")) {
-        messageSlack({
-          message: "```" + daemonResponse.error + "```",
-          title: "DAEMON ERROR: resolve"
-        });
         return reject(new Error("DAEMON ERROR: resolve"));
       } else
         return resolve(daemonResponse.result);
@@ -86,18 +77,10 @@ const getTrending = function() {
 
     request(options, function(error, response, daemonResponse) {
       if (error) {
-        messageSlack({
-          message: "```" + error + "```",
-          title: "DAEMON ERROR: trending"
-        });
         return reject(new Error("DAEMON ERROR: trending"));
       }
 
       if (Object.prototype.hasOwnProperty.call(daemonResponse, "error")) {
-        messageSlack({
-          message: "```" + daemonResponse.error + "```",
-          title: "DAEMON ERROR: trending"
-        });
         return reject(JSON.stringify(daemonResponse));
       } else
         return resolve(daemonResponse.result.items);

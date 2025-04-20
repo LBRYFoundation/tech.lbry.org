@@ -4,19 +4,17 @@
 
 //  I M P O R T S
 
-import got from "got";
 import prism from "prismjs";
 import raw from "choo/html/raw";
 import stringifyObject from "stringify-object";
 
 //  U T I L S
 
-import messageSlack from "./slack";
 import publishMeme from "./publish-meme";
-import lbrytvAPI from "~helper/lbrytv-sdk";
+import lbrytvAPI from "../helpers/lbrytv-sdk";
 
 import randomString from "./random-string";
-import { send } from "~socket";
+import { send } from "../sockets";
 import uploadImage from "./upload-image";
 
 const allowedQueryMethods = [
@@ -164,14 +162,6 @@ export default async(data, socket) => {
             type: "error"
           });
 
-          if (process.env.NODE_ENV !== "development") {
-            messageSlack({
-              message: "```" + JSON.parse(JSON.stringify(memePublishError.error)) + "```",
-              pretext: "_Someone is going through the Playground after a response has been parsed_",
-              title: `DAEMON ERROR | ${environment}`
-            });
-          }
-
           return;
         }
       } catch(imageUploadError) {
@@ -180,14 +170,6 @@ export default async(data, socket) => {
           message: "notification",
           type: "error"
         });
-
-        if (process.env.NODE_ENV !== "development") {
-          messageSlack({
-            message: "```" + imageUploadError.status + "```",
-            pretext: "_Someone attempted to upload a meme to the web daemon and it failed_",
-            title: `DAEMON ERROR | ${environment}`
-          });
-        }
 
         return;
       }
@@ -221,10 +203,8 @@ export default async(data, socket) => {
           });
         }
       } catch(error) {
-        messageSlack({
-          message: "```" + error + "```",
-          title: "DAEMON ERROR: resolve"
-        });
+        console.log(error);
+        
       }
       break;
 
@@ -250,7 +230,7 @@ export default async(data, socket) => {
     `https://${process.env.DAEMON_URL}/${resolveMethod}`;
 
   try {
-    const response = await got(queryUrl, queryOptions);
+    const response = await fetch(queryUrl, queryOptions);
 
     switch(true) {
       case data.example === 3:
@@ -289,11 +269,6 @@ export default async(data, socket) => {
     return response.body.result[Object.keys(response.body.result)[0]];
   } catch(error) {
     console.error(error);
-    messageSlack({
-      message: "```" + error + "```",
-      pretext: "_Someone is going through the Playground and the daemon is not running_",
-      title: `DAEMON ERROR | ${environment}`
-    });
   }
 };
 

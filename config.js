@@ -9,7 +9,7 @@ module.exports = exports = {
   github: {
     branch: "master",
     linkText: "Edit this page on GitHub",
-    repo: "lbryio/lbry.tech"
+    repo: "LBRYFoundation/tech.lbry.org"
   },
   meta: {
     color: "#222",

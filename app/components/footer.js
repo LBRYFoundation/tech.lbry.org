@@ -9,7 +9,6 @@ import html from "choo/html";
 //  U T I L S
 
 import editLink from "./edit-link";
-import emailSubscribe from "./email-subscribe";
 
 
 
@@ -20,15 +19,11 @@ export default state => {
     return "";
 
   return html`
-    <section class="email-subscribe-container">
-      ${emailSubscribe()}
-    </section>
-
     <footer class="footer">
       <div class="inner-wrap">
         <ul>
           <li>
-            <a href="//${process.env.NODE_ENV === "development" ? "localhost:8000" : "lbry.com"}" title="Rediscover content freedom">← LBRY.com</a> |
+            <a href="//lbry.org" title="Rediscover content freedom">← LBRY.org</a> |
             ${editLink(state.href)}
           </li>
 
@@ -40,6 +35,5 @@ export default state => {
       </div>
     </footer>
 
-    <script src="/assets/scripts/app.js"></script>
   `;
 };

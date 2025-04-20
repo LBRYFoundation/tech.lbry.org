@@ -1,14 +1,14 @@
-FROM node:10.2.1
+FROM node:22
 
 WORKDIR /app
 
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
-RUN npm install
+RUN npm install --force
  
 COPY . .
 
 EXPOSE 8080
 
-CMD [ "npm", "start" ]
+CMD [ "npm", "start", "--force" ]
