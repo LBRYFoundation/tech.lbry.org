@@ -4,7 +4,6 @@
 
 //  P A C K A G E S
 
-import * as color from "colorette";
 import compress from "fastify-compress";
 import fastify from "fastify";
 import ssr from "choo-ssr/fastify";
@@ -62,5 +61,5 @@ server
 //  B E G I N
 
 server.listen(process.env.PORT || 8080, process.env.IP || "0.0.0.0", async() => {
-  process.stdout.write(`\n— ${color.green("⚡")} ${server.server.address().port}\n`)
+  process.stdout.write(`\n— ⚡ ${server.server.address().port}\n`);
 });

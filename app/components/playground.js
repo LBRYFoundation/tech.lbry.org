@@ -4,7 +4,6 @@
 
 //  I M P O R T S
 
-import dedent from "dedent";
 import html from "choo/html";
 import raw from "choo/html/raw";
 
@@ -12,7 +11,7 @@ import raw from "choo/html/raw";
 
 //  E X P O R T
 
-export default () => dedent`
+export default () => html`
   <section class="playground">
     <ul class="playground-navigation">
       ${raw(navigation())}
@@ -43,7 +42,7 @@ function example1() {
 }
 
 function navigation() {
-  return dedent`
+  return html`
     <li
       class="playground-navigation__example"
       data-action="playground, example 1"

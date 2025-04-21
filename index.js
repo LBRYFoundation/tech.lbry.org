@@ -6,7 +6,6 @@
 
 // require('module-alias/register')
 require("@babel/register");
-require("@babel/polyfill");
 require("date-format-lite");
 require("dotenv").config();
 

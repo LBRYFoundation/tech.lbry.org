@@ -6,7 +6,6 @@
 
 import prism from "prismjs";
 import raw from "choo/html/raw";
-import stringifyObject from "stringify-object";
 
 //  U T I L S
 
@@ -140,7 +139,7 @@ export default async(data, socket) => {
           delete memePublishResponse.result.lbrytech_claim_name;
 
           const renderedCode = prism.highlight(
-            stringifyObject(memePublishResponse, { indent: "  ", singleQuotes: false }),
+            JSON.stringify(memePublishResponse, null, 2),
             prism.languages.json,
             "json"
           );
@@ -186,7 +185,7 @@ export default async(data, socket) => {
 
         if (socket) {
           const renderedCode = prism.highlight(
-            stringifyObject(resolveResponse, { indent: "  ", singleQuotes: false }),
+            JSON.stringify(resolveResponse, null, 2),
             prism.languages.json,
             "json"
           );
@@ -245,7 +244,7 @@ export default async(data, socket) => {
 
     if (socket) {
       const renderedCode = prism.highlight(
-        stringifyObject(response.body, { indent: "  ", singleQuotes: false }),
+        JSON.stringify(response.body, null, 2),
         prism.languages.json,
         "json"
       );

@@ -5,7 +5,6 @@
 //  I M P O R T S
 
 import asyncHtml from "choo-async/html";
-import dedent from "dedent";
 
 //  U T I L S
 
@@ -400,4 +399,25 @@ function renderCodeLanguageToggles(pageSlug) {
     onSdkPage ? "<button class='api-content__item' id='toggle-lbrynet' type='button'>lbrynet</button>" : "",
     onSdkPage ? "<button class='api-content__item' id='toggle-python' type='button'>python</button>" : ""
   ];
+}
+
+
+function dedent(string) {
+  // Split into lines
+  const lines = string.split('\n');
+
+  if (lines[0].trim() === '') lines.shift();
+  if (lines.length > 0 && lines[lines.length - 1].trim() === '') lines.pop();
+  const indents = lines
+    .slice(1)
+    .filter(line => line.trim() !== '')
+    .map(line => line.match(/^\s*/)[0].length);
+  const minIndent = indents.length > 0 ? Math.min(...indents) : 0;
+  return lines.map(line => {
+    const leadingWhitespace = line.match(/^\s*/)[0];
+    if (leadingWhitespace.length >= minIndent) {
+      return line.slice(minIndent);
+    }
+    return line;
+  }).join('\n');
 }

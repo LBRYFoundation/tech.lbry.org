@@ -4,10 +4,9 @@
 
 //  I M P O R T S
 
-import decamelize from "decamelize";
-import exists from "fs-exists-sync";
+// import decamelize from "decamelize";
+import fs from "fs";
 import fm from "front-matter";
-import fs from "graceful-fs";
 import html from "choo/html";
 import m from "markdown-it";
 import markdownAnchor from "markdown-it-anchor";
@@ -65,10 +64,10 @@ function partialFinder(markdownBody) {
 
   if (partials) {
     for (const partial of partials) {
-      const filename = decamelize(partial, "-").replace("<", "")
+      const filename = decamelize(partial).replace("<", "")
         .replace("/>", "")
         .trim();
-      const fileExistsTest = exists(`./app/components/${filename}.js`);
+      const fileExistsTest = fs.existsSync(`./app/components/${filename}.js`);
 
       if (!fileExistsTest)
         markdownBody = markdownBody.replace(partial, "");
@@ -94,4 +93,14 @@ function wikiFinder(markdownBody) {
       `<a class="link--glossary" href="${url}">${label}</a>` :
       match.input;
   });
+}
+
+function decamelize(str) {
+  if (typeof str !== 'string') {
+    throw new TypeError('Expected a string');
+  }
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase();
 }
