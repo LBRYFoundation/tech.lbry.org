@@ -25,12 +25,12 @@
     "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
     "@babel/register": "^7.25.9",
-    "@lbry/components": "^2019.6.22",
+    "@lbry/components": "https://github.com/LBRYFoundation/components#ff2759e4fae4b818b29b1439611fa38e6e13aa4c",
     "@springernature/sasslint-config": "^1.2.1",
     "eslint": "^6.1.0",
     "eslint-config": "^0.2.1",
     "husky": "^3.0.2",
-    "sass": "^1.22.9",
+    "sass": "^1.87.0",
     "sass-lint": "^1.13.1"
   },
   "husky": {
@@ -47,7 +47,7 @@
     "start": "npm i && npm run css && NODE_ENV=production node index.js",
     "test": "npm run test:dependencies & npm run test:lint & npm run test:sass",
     "test:dependencies": "updates --update ./ --exclude prismjs",
-    "test:lint": "standardx --verbose | snazzy",
+    "test:lint": "snazzy",
     "test:sass": "sass-lint --config ./node_modules/@inc/sasslint-config/config.json --verbose --no-exit",
     "watch": "npm run css && npm run watch:server & npm run watch:sass",
     "watch:sass": "sass --load-path=node_modules --watch app/sass:app/dist --style compressed",
