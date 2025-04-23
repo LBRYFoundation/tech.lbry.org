@@ -7,7 +7,7 @@
 
 //  U T I L S
 
-import relativeDate from "../modules/relative-date";
+import relativeDate from "../modules/relative-date.js";
 
 
 let githubFeed;
@@ -266,10 +266,7 @@ async function generateGitHubFeed(displayGitHubFeed) {
 
   displayGitHubFeed(`
     <h3>GitHub</h3>
-    <h5 class="last-updated">Last updated: ${lastGithubFeedUpdate.format("YYYY-MM-DD")
-  .replace(/-/g, "&middot;")} at ${lastGithubFeedUpdate
-  .format("UTC:H:mm:ss A")
-  .toLowerCase()} UTC</h5>
+    <h5 class="last-updated">Last updated: ${lastGithubFeedUpdate.date} at ${lastGithubFeedUpdate.time} UTC</h5>
 
     ${renderedEvents.join("")}
   `);
@@ -324,7 +321,13 @@ async function updateGithubFeed() {
   }
   
   githubFeed = await response.json();
-  lastGithubFeedUpdate = new Date();
+  const now = new Date();
+  lastGithubFeedUpdate = {
+    date: now.toISOString().split("T")[0],
+    time: now.toLocaleTimeString('en-US', {
+      timeZone: 'UTC'
+    })
+  };
 }
 
 

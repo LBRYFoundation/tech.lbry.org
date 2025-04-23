@@ -1,71 +1,33 @@
-"use strict";
+import { Hono } from "hono";
+
+import head from "./components/head.js";
+import wrapper from "./components/wrapper.js";
+
+import home from "./views/home.js";
+import api from "./views/api.js";
+import spec from "./views/spec.js";
+import redirect from "./views/redirect.js";
+
+const app = new Hono();
+
+app.get("/", page(home));
+
+app.get("/api/:wildcard", page(api));
+app.get("/spec", page(spec));
+app.get("*", page(redirect));
+
+function page(view) {
+    return async (c, emit) => {
+      return c.html(`
+        <!DOCTYPE html>
+        <html lang="en">
+          ${head(c)}
+          ${await wrapper(view)(c)}
+        </html>
+      `);
+    };
+  }
+  
 
 
-
-//  I M P O R T S
-
-import async from "choo-async";
-import asyncHtml from "choo-async/html";
-import choo from "choo";
-import ssr from "choo-ssr";
-
-//  U T I L S
-
-import head from "./components/head";
-import wrapper from "./components/wrapper";
-
-
-
-//  P R O G R A M
-
-function main() {
-  const app = async(choo());
-
-  const page = view => (
-    shell(
-      ssr.head(
-        head,
-        ssr.state()
-      ),
-      ssr.body(wrapper(view))
-    )
-  );
-
-  app.use(ssr());
-
-  app.route("/", page(require("./views/home")));
-  app.route("/api/*", page(require("./views/api")));
-  app.route("/spec", page(require("./views/spec")));
-  app.route("/*", page(require("./views/redirect")));
-
-  app.mount("html");
-
-  return app;
-}
-
-if (typeof window !== "undefined") main();
-
-
-
-//  E X P O R T
-
-module.exports = exports = main;
-
-
-
-//  H E L P E R
-
-function shell(head, body) {
-  return (state, emit) => {
-    const bodyPromise = Promise.resolve(body(state, emit));
-    const headPromise = bodyPromise.then(() => head(state, emit)); // resolve `head` once `body` is resolved
-
-    return asyncHtml`
-      <!DOCTYPE html>
-      <html lang="en">
-        ${headPromise}
-        ${bodyPromise}
-      </html>
-    `;
-  };
-}
+export default app;

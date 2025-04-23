@@ -52,5 +52,4 @@ const relativeDate = (() => {
 
 //  E X P O R T
 
-if (typeof module !== "undefined" && module.exports)
-  module.exports = exports = relativeDate;
+export default relativeDate;

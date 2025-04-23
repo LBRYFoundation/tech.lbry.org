@@ -4,7 +4,7 @@
 
 //  E X P O R T
 
-module.exports = exports = {
+export default {
   ga: "UA-60403362-8",
   github: {
     branch: "master",

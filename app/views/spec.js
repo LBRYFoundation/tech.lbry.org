@@ -1,18 +1,12 @@
-"use strict";
-
-
-
 //  I M P O R T
 
-import html from "choo/html";
-
-
+import { html } from 'hono/html'
 
 //  E X P O R T
 
-export default state => {
-  state.hideFooter = true;
-  state.lbry = {
+export default context => {
+  context.var.hideFooter = true;
+  context.var.lbry = {
     title: "LBRY Specification",
     description: "A detailed specification of the LBRY protocol. Learn exactly what LBRY is and how it works!"
   };
@@ -34,7 +28,7 @@ export default state => {
           return;
 
         const url = window.location.href.substr(0, window.location.href.lastIndexOf("#"));
-        history.replaceState(null, null, url + "#" + event.data);
+        history.replaceconst(null, null, url + "#" + event.data);
       });
     </script>
   `;

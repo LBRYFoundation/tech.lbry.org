@@ -1,21 +1,19 @@
-"use strict";
-
-
-
 //  I M P O R T
 
-import html from "choo/html";
+// import html from "choo/html";
+import { html } from 'hono/html'
+
 
 //  U T I L
 
-import config from "../../config";
+import config from "../../config.js";
 
 
 
 //  E X P O R T
 
-export default (state, emit) => {
-  const newMetadata = state.lbry;
+export default (context) => {
+  const newMetadata = context.var.lbry;
   const description = newMetadata && newMetadata.description ?
     newMetadata.description :
     config.meta.description;
@@ -23,11 +21,6 @@ export default (state, emit) => {
   const title = newMetadata && newMetadata.title ?
     newMetadata.title + " - lbry.tech" :
     "lbry.tech - " + config.meta.tagline;
-
-  if (state.title !== title)
-    emit(state.events.DOMTITLECHANGE, title);
-
-  state.page = state.page || { };
 
   return html`
     <meta charset="utf-8"/>
@@ -48,7 +41,7 @@ export default (state, emit) => {
     <meta property="og:locale" content="en_US"/>
     <meta property="og:site_name" content="LBRY.tech"/>
     <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://lbry.tech${state.href}"/>
+    <meta property="og:url" content="https://lbry.tech${context.href}"/>
 
     <!--/ Social/App Stuff /-->
     <meta name="apple-mobile-web-app-title" content="${config.meta.title}"/>

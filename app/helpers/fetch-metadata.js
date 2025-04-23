@@ -1,20 +1,16 @@
-"use strict";
-
-
-
 //  I M P O R T S
 
 import prism from "prismjs";
-import raw from "choo/html/raw";
+import { raw } from 'hono/html'
 
 //  U T I L S
 
-import publishMeme from "./publish-meme";
-import lbrytvAPI from "../helpers/lbrytv-sdk";
+import publishMeme from "./publish-meme.js";
+import lbrytvAPI from "../helpers/lbrytv-sdk.js";
 
-import randomString from "./random-string";
-import { send } from "../sockets";
-import uploadImage from "./upload-image";
+import randomString from "./random-string.js";
+import { send } from "../sockets.js";
+import uploadImage from "./upload-image.js";
 
 const allowedQueryMethods = [
   "support_create",

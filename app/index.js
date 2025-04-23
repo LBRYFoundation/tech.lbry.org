@@ -1,65 +1,89 @@
-"use strict";
+import { Hono } from "hono";
+import { serve } from "@hono/node-server";
+import { createBunWebSocket } from 'hono/bun';
+import { serveStatic } from "@hono/node-server/serve-static";
+import { secureHeaders } from 'hono/secure-headers';
+import { readFileSync } from 'fs';
+
+import client from "./client.js";
+import handleSocketMessages from "./sockets.js";
+
+import dotenv from "dotenv";
+
+
+if (!process.versions.bun) dotenv.config();
+
+
+const { upgradeWebSocket, websocket } =
+  createBunWebSocket()
 
 
 
-//  P A C K A G E S
+const redirects = JSON.parse(readFileSync('./app/data/redirects.json', 'utf8'));
 
-import compress from "fastify-compress";
-import fastify from "fastify";
-import ssr from "choo-ssr/fastify";
-import statik from "fastify-static";
-import websockets from "fastify-ws";
+const app = new Hono({ strict: true });
 
-//  U T I L S
-
-import handleSocketMessages from "./sockets";
-import redirects from "./data/redirects.json";
-
-const server = fastify({
-  logger: {
-    level: "warn",
-    prettyPrint: process.env.NODE_ENV === "development",
+// Own trimTrailingSlash function because hono's middleware doesn't work?
+app.use(async (c, next)=>{
+  if ((c.req.method === "GET" || c.req.method === "HEAD") && c.req.path !== "/" && c.req.path.at(-1) === "/") {
+    const url = new URL(c.req.url);
+    url.pathname = url.pathname.substring(0, url.pathname.length - 1);
+    c.res = c.redirect(url.toString(), 301);
   }
-});
+  await next();
+})
 
+app.use(secureHeaders())
 
-
-//  P R O G R A M
-
-server
-  .register(compress)
-  .register(websockets)
-  .register(statik, {
-    prefix: "/assets/",
-    root: `${__dirname}/dist/`
+// Mount websocket
+app.get(
+  '/',
+  upgradeWebSocket((c) => {
+    return {
+      onMessage(event, ws) {
+        return handleSocketMessages(ws, JSON.parse(event.data));
+      },
+      onClose: () => {
+        // console.log('Connection closed')
+      },
+    }
   })
-  .register(ssr, {
-    app: require("./client")
+);
+
+// Mount static files
+app.get(
+    "/assets/*",
+    serveStatic({
+      root: "./app/dist",
+      rewriteRequestPath: (path) => {
+        // return path
+        return path.replace(/^\/assets/, "/");
+      }
+    })
+)
+
+// Mount redirects
+app.use('*', async (c, next)=>{
+    if (Object.keys(redirects).includes(c.req.path)) return c.redirect(redirects[c.req.path])
+    await next();
+})
+
+
+
+
+app.route("/", client);
+
+
+if (!process.versions.bun) {
+  serve({
+      fetch: app.fetch,
+      port: process.env.PORT || 8080
   })
-  .addHook("preHandler", (request, reply, next) => {
-    if (redirects[request.raw.originalUrl])
-      reply.redirect(301, redirects[request.raw.originalUrl]);
+  process.stdout.write(`\n— ⚡ ${process.env.PORT || 8080}\n`);
+}
 
-    next();
-  })
-  .ready(err => {
-    if (err)
-      throw err;
-
-    server.ws.on("connection", socket => {
-      socket.on("message", data => {
-        data = JSON.parse(data);
-        return handleSocketMessages(socket, data);
-      });
-
-      socket.on("close", () => socket.terminate());
-    });
-  });
-
-
-
-//  B E G I N
-
-server.listen(process.env.PORT || 8080, process.env.IP || "0.0.0.0", async() => {
-  process.stdout.write(`\n— ⚡ ${server.server.address().port}\n`);
-});
+export default {
+  fetch: app.fetch,
+  websocket,
+  port: process.env.PORT || 8080
+}

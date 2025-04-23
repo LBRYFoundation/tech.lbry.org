@@ -4,13 +4,13 @@
 
 //  U T I L S
 
-import applications from "./module-applications";
-import chainquery from "./submodule-chainquery";
-import lbry from "./module-lbry";
-import lbrycrd from "./module-lbrycrd";
-import lighthouse from "./submodule-lighthouse";
-import reflector from "./submodule-reflector";
-import wallet from "./submodule-wallet";
+import applications from "./module-applications.js";
+import chainquery from "./submodule-chainquery.js";
+import lbry from "./module-lbry.js";
+import lbrycrd from "./module-lbrycrd.js";
+import lighthouse from "./submodule-lighthouse.js";
+import reflector from "./submodule-reflector.js";
+import wallet from "./submodule-wallet.js";
 
 
 

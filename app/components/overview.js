@@ -12,28 +12,28 @@ import {
   lighthouse,
   reflector,
   wallet
-} from "./ecosystem";
+} from "./ecosystem/index.js";
 
 
 
 //  E X P O R T
 
-export default () => `
+export default async () => `
   <section class="ecosystem">
     <aside class="ecosystem__submodules">
-      ${chainquery()}
-      ${wallet()}
+      ${await chainquery()}
+      ${await wallet()}
     </aside>
 
     <section class="ecosystem__modules">
-      ${lbrycrd()}
-      ${lbry()}
-      ${applications()}
+      ${await lbrycrd()}
+      ${await lbry()}
+      ${await applications()}
     </section>
 
     <aside class="ecosystem__submodules">
-      ${lighthouse()}
-      ${reflector()}
+      ${await lighthouse()}
+      ${await reflector()}
     </aside>
   </section>
 `;

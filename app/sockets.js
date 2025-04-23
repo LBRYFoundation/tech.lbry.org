@@ -1,17 +1,13 @@
-"use strict";
-
-
-
 //  I M P O R T S
 
-import html from "choo/html";
+import { html } from 'hono/html'
 
 //  U T I L S
 
-import apiPage from "./views/api";
-import fetchMetadata from "./helpers/fetch-metadata";
-import lbrytvAPI from "./helpers/lbrytv-sdk";
-import { generateGitHubFeed } from "./helpers/github";
+import apiPage from "./views/api.js";
+import fetchMetadata from "./helpers/fetch-metadata.js";
+import lbrytvAPI from "./helpers/lbrytv-sdk.js";
+import { generateGitHubFeed } from "./helpers/github.js";
 import { URL } from "url";
 
 
