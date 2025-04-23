@@ -7,12 +7,11 @@
 // import decamelize from "decamelize";
 import fs from "fs";
 import fm from "front-matter";
-import html from "choo/html";
+import { html, raw } from 'hono/html'
 import m from "markdown-it";
 import markdownAnchor from "markdown-it-anchor";
-import markdownSup from "../modules/markdown-it-sup";
+import markdownSup from "../modules/markdown-it-sup.js";
 import path from "path";
-import raw from "choo/html/raw";
 
 //  U T I L S
 
@@ -43,11 +42,11 @@ const md = m({
 
 //  E X P O R T
 
-export default path => {
+export default async path => {
   const markdownFile = fs.readFileSync(path, "utf-8");
   const markdownFileDetails = fm(markdownFile);
   const renderedMarkdown = md.render(markdownFileDetails.body);
-  const updatedMarkdown = wikiFinder(partialFinder(renderedMarkdown));
+  const updatedMarkdown = wikiFinder(await partialFinder(renderedMarkdown));
 
   return html`
     ${raw(updatedMarkdown)}
@@ -58,7 +57,7 @@ export default path => {
 
 //  H E L P E R S
 
-function partialFinder(markdownBody) {
+async function partialFinder(markdownBody) {
   const regexToFindPartials = /<\w+ ?\/>/g;
   const partials = markdownBody.match(regexToFindPartials);
 
@@ -73,10 +72,10 @@ function partialFinder(markdownBody) {
         markdownBody = markdownBody.replace(partial, "");
 
       else {
-        const partialFunction = require(path.join(__dirname, "..", `./components/${filename}.js`));
+        const { default: partialFunction } = await import(import.meta.resolve(`../components/${filename}.js`));
 
         if (filename === "glossary-toc") markdownBody = markdownBody.replace(partial, partialFunction.default);
-        else markdownBody = markdownBody.replace(partial, `</div>${partialFunction.default()}<div class="page__markup">`);
+        else markdownBody = markdownBody.replace(partial, `</div>${await partialFunction()}<div class="page__markup">`);
       }
     }
   }

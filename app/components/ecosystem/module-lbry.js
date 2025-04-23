@@ -4,13 +4,13 @@
 
 //  U T I L
 
-import markdown from "../../components/markdown";
+import markdown from "../../components/markdown.js";
 
 
 
 //  E X P O R T
 
-export default () => `
+export default async () => `
   <div class="ecosystem__module lbry">
     <span class="__close" data-action="close">&times;</span>
 
@@ -27,7 +27,7 @@ export default () => `
     </h2>
 
     <div class="ecosystem__module__details">
-      ${markdown("./documents/partials/overview/lbrysdk.md")}
+      ${await markdown("./documents/partials/overview/lbrysdk.md")}
     </div>
   </div>
 `;

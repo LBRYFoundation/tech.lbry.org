@@ -4,11 +4,13 @@
 
 //  I M P O R T
 
-import html from "choo/html";
+// import html from "choo/html";
+import { html } from "hono/html"
+
 
 //  U T I L
 
-import config from "../../config";
+import config from "../../config.js";
 
 
 

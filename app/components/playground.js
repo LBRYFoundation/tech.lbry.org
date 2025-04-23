@@ -1,13 +1,6 @@
-"use strict";
-
-
-
 //  I M P O R T S
 
-import html from "choo/html";
-import raw from "choo/html/raw";
-
-
+import { html, raw } from 'hono/html'
 
 //  E X P O R T
 

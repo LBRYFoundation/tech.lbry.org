@@ -1,12 +1,6 @@
-"use strict";
-
-
-
 //  U T I L
 
-import linkGrid from "./link-grid";
-
-
+import linkGrid from "./link-grid.js";
 
 //  E X P O R T
 

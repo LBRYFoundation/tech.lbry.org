@@ -1,27 +1,23 @@
-"use strict";
-
-
-
 //  I M P O R T S
 
 import fm from "front-matter";
-import fs from "graceful-fs";
-import html from "choo/html";
-import raw from "choo/html/raw";
+import fs from "fs";
+import { html, raw } from 'hono/html'
 
 //  U T I L S
 
-import markdown from "../components/markdown";
-import page404 from "./404";
+import markdown from "../components/markdown.js";
+import page404 from "./404.js";
 
 
 
 //  E X P O R T
 
-export default (state, emit) => { // eslint-disable-line
-  const partialPath = state.route === "resources/*" ?
-    `resources/${state.params.wildcard}` :
-    state.params.wildcard;
+export default (context) => { // eslint-disable-line
+  
+  const partialPath = /^\/resources\/.*/.test(context.req.path) ?
+    context.req.path :
+    context.req.path.slice(1);
 
   const path = `./documents/${partialPath}.md`;
 
@@ -43,11 +39,11 @@ export default (state, emit) => { // eslint-disable-line
       }
     }
 
-    state.lbry = customMetadata;
+    context.var.lbry = customMetadata;
   }
 
   // below is evil, I just inherited it -- Jeremy
-  state.lbry = {
+  context.var.lbry = {
     title: title,
     description: description
   };

@@ -4,13 +4,13 @@
 
 //  U T I L
 
-import markdown from "../../components/markdown";
+import markdown from "../../components/markdown.js";
 
 
 
 //  E X P O R T
 
-export default () => `
+export default async () => `
   <div class="ecosystem__module applications">
     <span class="__close" data-action="close">&times;</span>
 
@@ -28,7 +28,7 @@ export default () => `
     </h2>
 
     <div class="ecosystem__module__details">
-      ${markdown("./documents/partials/overview/applications.md")}
+      ${await markdown("./documents/partials/overview/applications.md")}
     </div>
   </div>
 `;

@@ -4,19 +4,19 @@
 
 //  U T I L
 
-import markdown from "../../components/markdown";
+import markdown from "../../components/markdown.js";
 
 
 
 //  E X P O R T
 
-export default () => `
+export default async () => `
   <div class="ecosystem__submodule reflector">
     <h3 class="ecosystem__submodule__title" data-action="openSubmodule" data-target="reflector">reflector</h3>
 
     <div class="ecosystem__submodule__description">
       <div class="ecosystem__submodule__markdown">
-        ${markdown("./documents/partials/overview/reflector.md")}
+        ${await markdown("./documents/partials/overview/reflector.md")}
       </div>
 
       <ul class="__parents">

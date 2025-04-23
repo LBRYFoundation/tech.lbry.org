@@ -4,18 +4,18 @@
 
 //  I M P O R T
 
-import html from "choo/html";
+import { html } from "hono/html"
 
 //  U T I L S
 
-import editLink from "./edit-link";
+import editLink from "./edit-link.js";
 
 
 
 //  E X P O R T
 
-export default state => {
-  if (state.hideFooter)
+export default context => {
+  if (context.hideFooter)
     return "";
 
   return html`
@@ -24,7 +24,7 @@ export default state => {
         <ul>
           <li>
             <a href="//lbry.org" title="Rediscover content freedom">← LBRY.org</a> |
-            ${editLink(state.href)}
+            ${editLink(context.req.url)}
           </li>
 
           <li><a href="/overview" title="LBRY overview">Overview</a></li>

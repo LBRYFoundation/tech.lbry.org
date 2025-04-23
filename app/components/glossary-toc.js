@@ -13,7 +13,7 @@ const titleRegex = /(>.*<)/g;
 
 //  E X P O R T
 
-export default (state, emit, markdown) => {
+export default (context, emit, markdown) => {
   const collectionOfTocElements = [];
   const tocElements = markdown.match(renderedHeaderRegex);
 

@@ -1,16 +1,15 @@
-"use strict";
-
-
-
 //  I M P O R T S
 
-import asyncHtml from "choo-async/html";
+import { html } from 'hono/html'
 
 //  U T I L S
 
-import headerBlockchain from "../components/api/header-blockchain";
-import headerSdk from "../components/api/header-sdk";
-import redirects from "../data/redirects.json";
+import headerBlockchain from "../components/api/header-blockchain.js";
+import headerSdk from "../components/api/header-sdk.js";
+import { readFileSync } from 'fs';
+// import redirects from './app/data/redirects.json' assert { type: 'json' };
+
+const redirects = JSON.parse(readFileSync('./app/data/redirects.json', 'utf8'));
 
 const cache = new Map();
 const filePathBlockchain = "/contrib/devtools/generated/api_v1.json";
@@ -21,15 +20,15 @@ const rawGitHubBase = "https://cdn.jsdelivr.net/gh/lbryfoundation/";
 
 //  E X P O R T
 
-export default async(state) => {
-  const { tag } = state;
-  const { wildcard } = state.params;
+export default async(context) => {
+  const { tag } = context;
+  const wildcard = context.req.param('wildcard');
 
   const repository = wildcard === "sdk" ?
     "lbry-sdk" :
     "lbrycrd";
 
-  state.lbry = {
+  context.var.lbry = {
     title: tag ? tag + " API Documentation" : "API Documentation",
     description: "See API documentation, signatures, and sample calls for the LBRY APIs."
   };
@@ -40,11 +39,11 @@ export default async(state) => {
   try {
     const apiResponse = await parseApiFile({ repo: repository, tag: currentTag });
 
-    return asyncHtml`
+    return html`
       <div class="__slate">
         <aside class="api-toc">
           <select class="api-toc__select" onchange="changeDocumentationVersion(value);">
-            ${asyncHtml(renderVersionSelector(wildcard, tags, tag))}
+            ${html(await renderVersionSelector(wildcard, tags, tag))}
           </select>
 
           <div class="api-toc__search">
@@ -54,7 +53,7 @@ export default async(state) => {
           </div>
 
           <ul class="api-toc__commands" id="toc" role="navigation">
-            ${asyncHtml(wildcard === "sdk" ? createSdkSidebar(apiResponse) : createApiSidebar(apiResponse))}
+            ${html(await wildcard === "sdk" ? createSdkSidebar(apiResponse) : createApiSidebar(apiResponse))}
           </ul>
         </aside>
 
@@ -63,11 +62,11 @@ export default async(state) => {
             <div></div>
 
             <nav class="api-content__items">
-              ${asyncHtml(renderCodeLanguageToggles(wildcard))}
+              ${html(await renderCodeLanguageToggles(wildcard))}
             </nav>
 
-            ${asyncHtml(createApiHeader(wildcard, currentTag))}
-            ${asyncHtml(wildcard === "sdk" ? createSdkContent(apiResponse) : createApiContent(apiResponse))}
+            ${html(await createApiHeader(wildcard, currentTag))}
+            ${html(await wildcard === "sdk" ? createSdkContent(apiResponse) : createApiContent(apiResponse))}
           </div>
         </section>
 
@@ -86,9 +85,9 @@ export default async(state) => {
     `;
   } catch(error) {
     console.log(error);
-    const redirectUrl = redirects[state.href];
+    const redirectUrl = redirects[context.req.url];
 
-    return asyncHtml`
+    return html(await `
       <article class="page" itemtype="http://schema.org/BlogPosting">
         <header class="page__header">
           <div class="page__header-wrap">
@@ -110,7 +109,7 @@ export default async(state) => {
           window.location.href = "${redirectUrl}";
         }, 2000);
       </script>
-    `;
+    `);
   }
 };
 

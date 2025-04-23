@@ -86,6 +86,6 @@ function superscript(state, silent) {
 
 //  E X P O R T
 
-module.exports = exports = function sup_plugin(md) { // eslint-disable-line camelcase
+export default function sup_plugin(md) { // eslint-disable-line camelcase
   md.inline.ruler.after("emphasis", "sup", superscript);
 };

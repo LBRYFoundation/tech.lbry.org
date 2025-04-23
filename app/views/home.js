@@ -1,14 +1,11 @@
-"use strict";
-
-
-
 //  I M P O R T
 
-import html from "choo/html";
+// import html from "choo/html";
+import { html } from 'hono/html'
 
 //  U T I L
 
-import linkGrid from "../components/link-grid";
+import linkGrid from "../components/link-grid.js";
 
 
 
