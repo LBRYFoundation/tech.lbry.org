@@ -24,6 +24,11 @@ export default currentUrl => {
       url: "/overview"
     },
     {
+      name: "Protocols",
+      title: "LBRY Protocols",
+      url: "/protocols"
+    },
+    {
       name: "Playground",
       title: "Experience LBRY",
       url: "/playground"
