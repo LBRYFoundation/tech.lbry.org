@@ -17,7 +17,7 @@ The root dictionary can hold 5 properties: `0`, `1`, `2`, `3` and `4`. Note: Ben
 
 When a node wants to send an error back (it doesn't need to in every case), then the error message looks like the response message. However, the `3` property now contains the error type and optionally, `4` contains more information.
 
-### Ping
+## Ping
 
 The request has a property `3` with value `ping`.
 
@@ -28,7 +28,7 @@ In protocol version `1`, there is 1 request argument:
 
 In both versions, the response has a property `3` with value `pong`.
 
-### Find Node
+## Find Node
 
 The request has a property `3` with value `findNode`.
 
@@ -41,7 +41,7 @@ In protocol version `1`, there are 2 request arguments:
 
 In both versions, the response has a property `3` with a list as value. Every item in the list is a tuple (another list), containing the node ID as 48-byte string, the IP as string and the port as integer.
 
-### Find Value
+## Find Value
 
 The request has a property `3` with value `findValue`.
 
@@ -58,11 +58,11 @@ In both versions, the response has a property `3` with a dictionary as value:
 - If the key is known by the node, `contacts` isn't required, but allowed to be present. The response now at least has a property with the same 48 byte long name as the key in the request. This property is a list, where every item in the list is a compact address. This compact address contains information on where the blob can be downloaded.
 - The optional `p` property is an integer with the amount of pages of download locations. If there are no download locations, the `p` value is integer `0`. If the `p` property is set in the request, the `contacts` property is absent.
 
-#### Compact Address
+### Compact Address
 
 The compact address is a value of 54 bytes. The first 4 bytes are the binary format of the IPv4 address. The next 2 bytes are the TCP port where the blob can be downloaded. The remanining 48 bytes are the node id of the associated DHT peer.
 
-### Store
+## Store
 
 The request has a property `3` with value `store`.
 

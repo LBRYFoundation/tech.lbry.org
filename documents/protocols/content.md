@@ -9,7 +9,7 @@ This protocol provides a way to pull a blob from a specific node. The protocol u
 - **Port:** 4444/TCP (distributed peer)
 - **Port:** 5567/TCP (fixed peer)
 
-### Availability
+## Availability
 
 This request will check what blobs are available on the peer. It takes the sent list of blob hashes from `requested_blobs`, checks everyone of them, and returns a list of available blobs in `available_blobs`. Also, the request contains `lbrycrd_address`, which is a boolean property. In the response the `lbrycrd_address` property is a string containing an address. However, the use of `lbrycrd_address` for paying for blob data is not implemented yet.
 
@@ -29,7 +29,7 @@ This request will check what blobs are available on the peer. It takes the sent 
 {"lbrycrd_address":"bJxKvpD96kaJLriqVajZ7SaQTsWWyrGQct","requested_blobs":[]}
 ```
 
-### Payment Rate
+## Payment Rate
 
 The reason behind this request is unknown at this moment. The request contains the `blob_data_payment_rate` property with a float. The result is always `RATE_ACCEPTED`, unless the float is below zero. Then the server will respond with `RATE_TOO_LOW`. At this moment, `RATE_UNSET` is not used.
 
@@ -45,7 +45,7 @@ The reason behind this request is unknown at this moment. The request contains t
 {"blob_data_payment_rate":"RATE_UNSET"}
 ```
 
-### Blob
+## Blob
 
 This request will get the blob itself. The hash will be sent using `requested_blob`. The server then reacts with an `incoming_blob`. If everything is correct, the `incoming_blob` contains a `blob_hash` property and a `length` property. The blob data directly follows after the JSON block response. If an error occurs, the `incoming_blob` contains an `error` property (and `blob_hash` is empty and `length` is zero).
 

@@ -7,7 +7,7 @@ This protocol provides a way to actively push blobs to the network, instead of w
 
 - **Port:** 5566/TCP
 
-### Handshake
+## Handshake
 
 Before doing anything with blobs, the handshake should be sent. The `version` property is required and should be an integer valued `0` or `1`. If the server supports that version, it will send back an JSON block where the `version` property has the same value. If the `value` property contains an invalid protocol number or a protocol number that isn't supported, the server throws an error and closes the connection.
 
@@ -23,7 +23,7 @@ Before doing anything with blobs, the handshake should be sent. The `version` pr
 {"version":1}
 ```
 
-### Blob Hash and Blob Size
+## Blob Hash and Blob Size
 
 After the handshake, blobs can be received. First, the server wants to know more about the blob itself, before it wants to receive the blob data itself. The clients needs to send a JSON block with the blob hash and the blob size. It is important to note that this request is different for normal blobs and SD (Stream Descriptor) blobs. The properties `blob_hash` and `blob_size` are required OR the properties `sd_blob_hash` and `sd_blob_size` are required. The hash cannot be empty and the size cannot be zero or exceed the maximum blob size.
 
@@ -53,7 +53,7 @@ Then, the server will check if it wants to receive the blob. It can do several c
 {"send_sd_blob":true,"needed_blobs":["aabbcc","ddeeff"]} // if version>=1
 ```
 
-### Blob Data
+## Blob Data
 
 If the server wants the blob, it will read exactly the amount of bytes that were stated in the blob information. If there goes something wrong with sending the blob data (e.g. there was a socket timeout or the blob hash calculation didn't match the blob hash from the blob information), the server will send a message that it didn't receive the blob. This will be a JSON block with the `received_blob` property for normal blobs and a JSON block with `received_sd_blob` for SD blobs. After this message, the client can send information about another blob.
 
