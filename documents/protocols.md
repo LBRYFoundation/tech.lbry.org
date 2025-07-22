@@ -24,3 +24,5 @@ description: Understand how LBRY works low level and build your own implementati
 
 
 - [Reflector Protocol](/protocols/reflector)
+
+![Protocol Chart](/assets/LBRYNetworkProtocolChart.png)
