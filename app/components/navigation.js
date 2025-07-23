@@ -24,6 +24,11 @@ export default currentUrl => {
       url: "/overview"
     },
     {
+      name: "Tutorials",
+      title: "LBRY Tutorials",
+      url: "/tutorials"
+    },
+    {
       name: "Protocols",
       title: "LBRY Protocols",
       url: "/protocols"
@@ -37,11 +42,6 @@ export default currentUrl => {
       name: "Resources",
       title: "View LBRY resources",
       url: "/resources"
-    },
-    {
-      name: "Tutorials",
-      title: "LBRY Tutorials",
-      url: "/tutorials"
     },
     {
       name: "Community",
