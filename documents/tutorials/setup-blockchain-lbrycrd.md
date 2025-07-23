@@ -1,9 +1,9 @@
 ---
-title: Setup LBRY blockchain with lbrycrd
-description: Learn how to setup the LBRY blockchain with lbrycrd.
+title: Setup LBRY blockchain with LBRYCRD
+description: Learn how to setup the LBRY blockchain with LBRYCRD.
 ---
 
-<Note text="It is recommended to use LBCD."/>
+<Note/>
 
 ## Building
 
