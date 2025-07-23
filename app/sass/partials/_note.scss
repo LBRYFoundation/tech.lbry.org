@@ -1,8 +1,8 @@
 .component--note {
   padding: 1rem 1rem 1rem 1.25rem;
 
-  background-color: rgba($lbry-teal-1, 0.3);
-  border-left: 0.5rem solid $lbry-teal-3;
+  background-color: #ffa50050;
+  border-left: 0.5rem solid #ffa500;
   line-height: 1.55;
   margin-bottom: 1.5rem;
   position: relative;
@@ -22,7 +22,7 @@
 }
 
 .component--note__title {
-  color: $lbry-teal-3;
+  color: #ffa500;
   display: block;
   letter-spacing: 0.025rem;
   text-transform: uppercase;
