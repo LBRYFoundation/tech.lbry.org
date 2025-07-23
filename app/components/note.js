@@ -14,6 +14,6 @@ import { html } from 'hono/html'
 export default () => html`
   <div class="component--note">
     <strong class="component--note__title">Note</strong>
-    <span>It is recommended to use LBCD.</span>
+    <span>LBRYCRD is deprecated and not officially supported anymore. It is recommended to use LBCD.</span>
   </div>
 `;
