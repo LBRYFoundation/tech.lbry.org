@@ -24,7 +24,7 @@ export default async(context) => {
   const { tag } = context;
   const wildcard = context.req.param('wildcard');
 
-  const repository = wildcard === "sdk" ?
+  const repository = wildcard === "daemon" ?
     "lbry-sdk" :
     "lbrycrd";
 
@@ -53,7 +53,7 @@ export default async(context) => {
           </div>
 
           <ul class="api-toc__commands" id="toc" role="navigation">
-            ${html(await wildcard === "sdk" ? createSdkSidebar(apiResponse) : createApiSidebar(apiResponse))}
+            ${html(await wildcard === "daemon" ? createSdkSidebar(apiResponse) : createApiSidebar(apiResponse))}
           </ul>
         </aside>
 
@@ -66,7 +66,7 @@ export default async(context) => {
             </nav>
 
             ${html(await createApiHeader(wildcard, currentTag))}
-            ${html(await wildcard === "sdk" ? createSdkContent(apiResponse) : createApiContent(apiResponse))}
+            ${html(await wildcard === "daemon" ? createSdkContent(apiResponse) : createApiContent(apiResponse))}
           </div>
         </section>
 
@@ -149,7 +149,7 @@ function createApiHeader(slug, apiVersion) {
     case "blockchain":
       return headerBlockchain(apiVersion);
 
-    case "sdk":
+    case "daemon":
       return headerSdk(apiVersion);
 
     default:
@@ -261,7 +261,7 @@ async function getTags(repositoryName) {
           tag.version !== "v0.3.15" &&
           tag.version !== "v0.3-osx" &&
           tag.version !== "v0.2-alpha"
-        ) 
+        )
           tags.push(tag.version);
       });
       break;
@@ -389,7 +389,7 @@ function renderVersionSelector(pageSlug, versions, desiredTag) {
 }
 
 function renderCodeLanguageToggles(pageSlug) {
-  const onSdkPage = pageSlug === "sdk";
+  const onSdkPage = pageSlug === "daemon";
 
   return [
     "<button class='api-content__item menu' id='toggle-menu'>menu</button>",

@@ -11,7 +11,7 @@
 if (!contentTag)
   var contentTag;
 
-contentTag = window.location.pathname.split("/").pop() === "sdk" ?
+contentTag = window.location.pathname.split("/").pop() === "daemon" ?
   ".api-toc__section" :
   "#toc";
 
