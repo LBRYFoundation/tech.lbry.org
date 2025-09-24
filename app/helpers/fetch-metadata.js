@@ -37,8 +37,8 @@ const environment = process.env.NODE_ENV === "development" ?
 
 //  P A C K A G E
 
-const loadLanguages = require("prismjs/components/");
-loadLanguages(["json"]); // eslint-disable-line padding-line-between-statements
+//const loadLanguages = require("prismjs/components");
+//loadLanguages(["json"]);
 
 
 
@@ -116,7 +116,7 @@ export default async(data, socket) => {
 
       try {
         const imageUploadResponse = await uploadImage(body.file_path);
-        body.file_path = imageUploadResponse.filename; // eslint-disable-line padding-line-between-statements
+        body.file_path = imageUploadResponse.filename;
 
         try {
           const memePublishResponse = await publishMeme(body);
@@ -199,7 +199,7 @@ export default async(data, socket) => {
         }
       } catch(error) {
         console.log(error);
-        
+
       }
       break;
 

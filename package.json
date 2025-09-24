@@ -17,17 +17,18 @@
   },
   "description": "Documentation for the LBRY protocol and associated projects",
   "devDependencies": {
+    "@eslint/js": "^9.36.0",
     "@lbry/components": "^2019.6.22",
     "@springernature/sasslint-config": "^1.2.1",
-    "eslint": "^6.1.0",
-    "eslint-config": "^0.2.1",
+    "eslint": "^9.36.0",
+    "globals": "^16.4.0",
     "husky": "^3.0.2",
     "sass": "^1.87.0",
     "sass-lint": "^1.13.1"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run format && npm run test:sass && git add -A :/"
+      "pre-commit": "npm run format && npm run test:sass"
     }
   },
   "main": "app/index.js",

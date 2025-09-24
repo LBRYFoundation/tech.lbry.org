@@ -13,7 +13,7 @@ import page404 from "./404.js";
 
 //  E X P O R T
 
-export default (context) => { // eslint-disable-line
+export default (context) => {  
   
   const partialPath = /^\/resources\/.*/.test(context.req.path) ?
     context.req.path :

@@ -63,14 +63,14 @@ function superscript(state, silent) {
 
   if (content.match(regexForIds)) {
     const theLink = supText.match(regexForIds)[0].replace("(#", "").replace(")", "");
-    token.attrPush(["id", theLink]); // eslint-disable-line padding-line-between-statements
+    token.attrPush(["id", theLink]);  
   }
 
   token = state.push("text", "", 0);
 
   if (content.match(regexForIds)) {
     const theText = supText.match(regexForTextBeforeLink)[0];
-    token.content = theText; // eslint-disable-line padding-line-between-statements
+    token.content = theText;  
   } else token.content = supText;
 
   token = state.push("sup_close", "sup", -1);
@@ -86,6 +86,6 @@ function superscript(state, silent) {
 
 //  E X P O R T
 
-export default function sup_plugin(md) { // eslint-disable-line camelcase
+export default function sup_plugin(md) {  
   md.inline.ruler.after("emphasis", "sup", superscript);
 };
