@@ -32,7 +32,7 @@ npm run dev
 
 Before we make any changes, it's a good idea to verify that everything is working correctly.
 
-Try typing a word into the text input and click the button to [resolve](https://lbry.tech/api/sdk#resolve) it.
+Try typing a word into the text input and click the button to [resolve](https://lbry.tech/api/daemon#resolve) it.
 
 This performs a [[claim]] lookup, which retrieves metadata the title, thumbnail, and file type from the LBRY blockchain.
 
@@ -42,7 +42,7 @@ If you received no errors, move on to Step 3!  Otherwise, head back to Step 1 to
 
 #### Step 3. Make a small change to the code
 
-Now that we have the metadata, let's [get](https://lbry.tech/api/sdk#get) the actual file!
+Now that we have the metadata, let's [get](https://lbry.tech/api/daemon#get) the actual file!
 
 The code to do this is already there, just un-comment these lines in the app's [renderer/index.js](https://github.com/lbryio/electron-starter/blob/master/src/renderer/index.js) file.
 

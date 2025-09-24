@@ -48,13 +48,13 @@ npm run dev
 
 #### 2. Verify the app works
 
-Type a word into the text input and click the button to [resolve](https://lbry.tech/api/sdk#resolve) it. This performs a [[claim]] lookup, which retrieves metadata the title, thumbnail, and file type from the LBRY blockchain.
+Type a word into the text input and click the button to [resolve](https://lbry.tech/api/daemon#resolve) it. This performs a [[claim]] lookup, which retrieves metadata the title, thumbnail, and file type from the LBRY blockchain.
 
 Try resolving `lbry://doitlive`.
 
 #### 3. Modify the code
 
-Now that we have the metadata, let's [get](https://lbry.tech/api/sdk#get) the actual file! The code to do this is already there, just un-comment these lines in the app's [renderer/index.js](https://github.com/lbryio/electron-starter/blob/master/src/renderer/index.js) file.
+Now that we have the metadata, let's [get](https://lbry.tech/api/daemon#get) the actual file! The code to do this is already there, just un-comment these lines in the app's [renderer/index.js](https://github.com/lbryio/electron-starter/blob/master/src/renderer/index.js) file.
 
 ```js
 claimData.innerText = "Loading...";
@@ -86,7 +86,7 @@ Unfortunately, most users will want more functionality in an app than typing int
 
 You can build many types of apps. Your app doesn't have to use Electron, nor does it have to be targeted at consumers, use a UI, or even fetch digital content at all! In this section, we'll look into the different types of apps you could build, and the different components needed to build anything you want.
 
-Most applications will use the [LBRY SDK](#sdk) as a way of accessing and communicating with the LBRY network. A look at the [APIs](https://lbry.tech/api/sdk) provided by the SDK will help you understand what it can and can't do.
+Most applications will use the [LBRY SDK](#sdk) as a way of accessing and communicating with the LBRY network. A look at the [APIs](https://lbry.tech/api/daemon) provided by the SDK will help you understand what it can and can't do.
 
 Some applications do not need to access content available on the network (e.g. a wallet-only app, or a blockchain visualizer). These applications might use [lbrycrd](#lbrycrd), the full-node blockchain daemon, or [chainquery](#chainquery), which parses blockchain data into SQL.
 
@@ -102,7 +102,7 @@ For an example of a full web application that uses LBRY, check out the [spee.ch 
 
 To create a full web application follow the typical steps you follow to create a basic application. Then, [follow the steps to interact with the LBRY SDK](#sdk).
 
-Full web applications can may also benefit from using [chainquery](#chainquery), which provides an SQL interface to blockchain data. 
+Full web applications can may also benefit from using [chainquery](#chainquery), which provides an SQL interface to blockchain data.
 
 If your web application will utilize user accounts, a common design pattern is to simply associate user IDs with common LBRY types like files, claims, and channels.
 
@@ -142,7 +142,7 @@ Regardless of the type of desktop app, you'll want to follow the steps for [usin
 
 The [official LBRY desktop app](https://github.com/lbryio/lbry-desktop) is built with Electron. It is very easy to build with, and allows web developers to easily start creating "native" desktop applications. You can use a plain html document with a `<script>` tag, or build out a large web app. The official desktop app uses [React](https://reactjs.org/).
 
-If you want to write an electron app, check out the [electron-starter project](https://github.com/lbryio/electron-starter) for a bare bones setup that is very similar to how [lbry-desktop](https://github.com/lbryio/lbry-desktop) is structured. It's also a simple way to explore the [SDK API](https://lbry.tech/api/sdk).
+If you want to write an electron app, check out the [electron-starter project](https://github.com/lbryio/electron-starter) for a bare bones setup that is very similar to how [lbry-desktop](https://github.com/lbryio/lbry-desktop) is structured. It's also a simple way to explore the [SDK API](https://lbry.tech/api/daemon).
 
 Check out [this video](https://spee.ch/6/lbry-electron-starter) for a brief overview and guide to get it running. If you just want the source code, go [here](https://github.com/lbryio/electron-starter). Or, if you really really want to see it in action _now_, just paste these commands into your terminal:
 
@@ -199,7 +199,7 @@ Then, use an API wrapper to talk to the SDK or write your own. There are a numbe
 
 If a wrapper for the language you would like to use doesn't exist, it is still fairly easy to interact with. The SDK provides a JSON-RPC server at `localhost:5279` for interaction. You can call it via `cURL` or the HTTP functionality provided by the language you are using. You can look at an existing wrapper in another language for more detail.
 
-The API provided by the SDK is documented [here](https://lbry.tech/api/sdk).
+The API provided by the SDK is documented [here](https://lbry.tech/api/daemon).
 
 ### Chainquery
 

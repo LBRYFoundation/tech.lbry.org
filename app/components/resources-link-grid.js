@@ -11,7 +11,7 @@ export default () => linkGrid([{
   title: "LBRY Specification"
 }, {
   description: "Method signatures and examples for lbry-sdk, the most common way to build on LBRY.",
-  destination: "/api/sdk",
+  destination: "/api/daemon",
   label: "SDK APIs",
   title: "SDK APIs"
 }, {

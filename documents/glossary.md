@@ -47,7 +47,7 @@ Similar to the [Short URL](#short-url), but will include the channel for but for
 
 ### Chainquery
 
-A tool that stores blockchain data in an SQL database, keeps the database up-to-date as the blockchain grows, and provides an API to access the data using standard SQL queries. 
+A tool that stores blockchain data in an SQL database, keeps the database up-to-date as the blockchain grows, and provides an API to access the data using standard SQL queries.
 
 [chainquery on github](https://github.com/lbryio/chainquery)
 
@@ -108,7 +108,7 @@ A node which can definitively decide whether a transaction is valid or not, with
 The first block in the blockchain. The genesis block is not mined, but is hard-coded into the protocol. It has no reference to a previous block. The LBRY genesis block was released on [28 Oct 2015](https://explorer.lbry.com/blocks/0). The first real block was mined was on [23 Jun 2016](https://explorer.lbry.com/blocks/1).
 
 
-#### Hard Fork 
+#### Hard Fork
 
 A change to the consensus rules such that a block that would have been considered invalid under the old rules is now considered valid under the new rules. Nodes that choose to adopt the hard fork will have to upgrade to the new rules in order to stay on the network. Nodes that refuse to adopt the new rules may continue to use the old rules. If a significant number of nodes are running both versions of the rules at once, the chain may split into two incompatible chains.
 
@@ -132,7 +132,7 @@ The SDK is three things:
 - components that are not part of the spec but are useful for developing applications using the protocol
 - a daemon that participates in the LBRY data network and provides an API for interacting with the protocol
 
-See [the source code](https://github.com/lbryio/lbry-sdk) or [the API documentation](/api/sdk).
+See [the source code](https://github.com/lbryio/lbry-sdk) or [the API documentation](/api/daemon).
 
 ### LBRY Credits
 
@@ -164,7 +164,7 @@ A node that is connected to the global network and is responding to protocol req
 
 ### Permissionless
 
-A system is permissionless if it can be joined, interacted with, or used without the explicit authorization of any party, nor can any party revoke the ability to use the system. 
+A system is permissionless if it can be joined, interacted with, or used without the explicit authorization of any party, nor can any party revoke the ability to use the system.
 
 An open system with no centralized control is permissionless. Examples include HTTP and Bitcoin.
 
@@ -190,7 +190,7 @@ A scheme to validate transactions without storing the whole blockchain.
 
 ### Short URL
 
-The shortest [URL](https://spec.lbry.com/#urls), not including the [channel](#channel), that will [resolve](#resolve) to the correct claim (i.e. lbry://cats#c, returning lbry://cats#ca43e2b6db155177564e574b09dfedc7588816ef or lbry://@cats#0 returning lbry://@cats#0893dbed95307c4b27aadbcb1cc6cb593810b3f9). This is determined on a first come, first serve basis on claim id collisions. A short URL with more than one identifier may change to include only a single identifier if the previous claim, which had the single identifier, is deleted. 
+The shortest [URL](https://spec.lbry.com/#urls), not including the [channel](#channel), that will [resolve](#resolve) to the correct claim (i.e. lbry://cats#c, returning lbry://cats#ca43e2b6db155177564e574b09dfedc7588816ef or lbry://@cats#0 returning lbry://@cats#0893dbed95307c4b27aadbcb1cc6cb593810b3f9). This is determined on a first come, first serve basis on claim id collisions. A short URL with more than one identifier may change to include only a single identifier if the previous claim, which had the single identifier, is deleted.
 
 ### SPV
 

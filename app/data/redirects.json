@@ -1,8 +1,9 @@
 {
   "/api": "/resources",
-  "/api/lbry": "/api/sdk",
+  "/api/lbry": "/api/daemon",
   "/api/lbrycrd": "/api/blockchain",
-  "/api/protocol": "/api/sdk",
+  "/api/sdk": "/api/daemon",
+  "/api/protocol": "/api/daemon",
   "/play": "/playground",
   "/repository-standards": "/resources/repository-standards",
   "/resources/lbry-claimtrie": "/spec#claimtrie",

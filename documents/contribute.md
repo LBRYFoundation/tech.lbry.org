@@ -22,7 +22,7 @@ If you want to contribute to LBRY, there's definitely something for you! The fir
 | Component | Language (Toolset) | What Is It | Intro Video
 --- | --- | --- | ---
 | [lbrycrd](https://github.com/lbryio/lbrycrd) | C++ | A full node for the LBRY blockchain, including a standalone wallet. Used by miners and some applications. Most consumer applications do not bundle [[lbrycrd]] directly, and instead bundle [[lbry-sdk]]. | [Video](/resources/video-lbrycrd)
-| [lbry-sdk](https://github.com/lbryio/lbry-sdk) | Python (asyncio) | A daemon that can be used directly or to develop other applications. Provides convenience [APIs](/api/sdk), bundles an SPV wallet client and server, and contains an implementation of the LBRY data network. | [Video](/resources/video-lbrysdk)
+| [lbry-sdk](https://github.com/lbryio/lbry-sdk) | Python (asyncio) | A daemon that can be used directly or to develop other applications. Provides convenience [APIs](/api/daemon), bundles an SPV wallet client and server, and contains an implementation of the LBRY data network. | [Video](/resources/video-lbrysdk)
 | [schema](https://github.com/lbryio/lbry-sdk/tree/master/lbry/schema) | Protobuf, Python | Defines the structure of the metadata stored in the LBRY blockchain. | |
 
 ### Official Applications

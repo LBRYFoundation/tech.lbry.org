@@ -1,13 +1,13 @@
 ---
 title: SDK Settings
-description: The daemon provided by the LBRY SDK has many settings. This resource lists them all and what they mean. Ready, set, settings! 
+description: The daemon provided by the LBRY SDK has many settings. This resource lists them all and what they mean. Ready, set, settings!
 ---
 
 This document outlines how to configure SDK daemon settings and what options are available. They can be found on the lbry GitHub repository in [conf.py](https://github.com/lbryio/lbry-sdk/blob/master/lbry/conf.py).
 
 ## Daemon settings configuration
 
-The easiest way to configure the settings is by editing the `daemon_settings.yml` file (may need to be created) that resides in the default [lbrynet directory](https://lbry.com/faq/lbry-directories). These settings can also be configured via the [settings_set](https://lbry.tech/api/sdk#settings_set) API call. The [settings_get](https://lbry.tech/api/sdk#settings_get) API call can be used to retrieve current values. Some values will require an SDK restart after being set via the API call.
+The easiest way to configure the settings is by editing the `daemon_settings.yml` file (may need to be created) that resides in the default [lbrynet directory](https://lbry.com/faq/lbry-directories). These settings can also be configured via the [settings_set](https://lbry.tech/api/daemon#settings_set) API call. The [settings_get](https://lbry.tech/api/daemon#settings_get) API call can be used to retrieve current values. Some values will require an SDK restart after being set via the API call.
 
 Sample daemon_settings.yml file:
 ```
@@ -39,11 +39,11 @@ Configuration options are organized by their respective areas: Files, Wallet, Ne
 | wallet                        | string  | 'lbryum'                                             | 'lbrycrd'                          | Choice of wallet software, SPV (lbryum) vs full node (lbrycrd). Currently   only lbryum supported |
 | use_keyring                   | boolean | false                                                | true                               | Store wallet password in keyring (not currently available)                                                                 |
 
-### Network 
+### Network
 | Setting                    | Format  | Default value             | Sample Values              | Description                                                                        |
 |----------------------------|---------|---------------------------|----------------------------|------------------------------------------------------------------------------------|
 | api                        | string  | localhost:5279            | 0:0:0:0:5280               | IP address and port the SDK API will listen on     |
-| streaming_server           | string  | localhost:5280            | 0:0:0:0:5280               | IP address and port the media/streaming server will listen on   | 
+| streaming_server           | string  | localhost:5280            | 0:0:0:0:5280               | IP address and port the media/streaming server will listen on   |
 | cache_time                 | integer | 150                       | 90                         | How long to keep resolve data in cache                                             |
 | data_rate                  | float   | 0.0001                    | 0.05                       | What LBC rate, per MB, to offer DHT data at (currently disabled in the protocol)   |
 | udp_port                   | integer | 4444                      | 4445                       | UDP port used to announce blobs                                                    |
