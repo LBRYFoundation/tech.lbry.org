@@ -1,14 +1,11 @@
-FROM oven/bun:1.2.10-alpine
+FROM oven/bun:1.2.22-alpine
 
 WORKDIR /app
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY . .
 
 RUN bun install
- 
-COPY . .
 
 EXPOSE 8080
 
-CMD [ "bun", "run", "start" ]
+CMD ["bun", "run", "start"]
